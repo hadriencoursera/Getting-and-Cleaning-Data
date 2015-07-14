@@ -1,17 +1,17 @@
-if (!file.exists("rawdata"))
-        {
-                dir.create("rawdata")
-        }
+#if (!file.exists("rawdata"))
+#        {
+#                dir.create("rawdata")
+#        }
 
-fileUrl="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-download.file(fileUrl,destfile="./rawdata/dataset.zip")
+#fileUrl="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+#download.file(fileUrl,destfile="./rawdata/dataset.zip")
 
-unzip("./rawdata/dataset.zip")
+#unzip("./rawdata/dataset.zip")
 
 #read train, test and feature data
-train<-as.data.frame(read.table("./UCI HAR Dataset/train/X_Train.txt"))
-subject_train<-as.data.frame(read.table("./UCI HAR Dataset/train/subject_train.txt"))
-feature<-as.data.frame(read.table("./UCI HAR Dataset/features.txt"))
+train<-as.data.frame(read.table("X_Train.txt"))
+subject_train<-as.data.frame(read.table("subject_train.txt"))
+feature<-as.data.frame(read.table("features.txt"))
 
 #assign names to train dataframe
 names(train)<-feature[,2]
@@ -20,8 +20,8 @@ names(subject_train)=list("subject")
 train<-cbind(subject_train,train)
 
 #assign names to test dataframe
-test<-as.data.frame(read.table("./UCI HAR Dataset/test/X_Test.txt"))
-subject_test<-as.data.frame(read.table("./UCI HAR Dataset/test/subject_test.txt"))
+test<-as.data.frame(read.table("X_Test.txt"))
+subject_test<-as.data.frame(read.table("subject_test.txt"))
 
 names(test)<-feature[,2]
 names(subject_test)=list("subject")
@@ -43,14 +43,14 @@ x<-c(mean,std)
 meanstddata<-tbl_df(data[,c("subject",x)])
 
 #read the activity for both datasets and combine them
-y_train<-as.data.frame(read.table("./UCI HAR Dataset/train/y_Train.txt"))
-y_test<-as.data.frame(read.table("./UCI HAR Dataset/test/y_Test.txt"))
+y_train<-as.data.frame(read.table("y_Train.txt"))
+y_test<-as.data.frame(read.table("y_Test.txt"))
 
 y_bind<-rbind(y_train,y_test)
 names(y_bind)<-list("activity_code")
 
 #put the activity label in the dataframe
-activities <- as.data.frame(read.table("./UCI HAR Dataset/activity_labels.txt"))
+activities <- as.data.frame(read.table("activity_labels.txt"))
 names(activities)<-list("activity_code","activity_label")
 y_bind[, 2] <- activities[y_bind[, 1], 2]
 names(y_bind)<-list("activity_code","activity_label")
